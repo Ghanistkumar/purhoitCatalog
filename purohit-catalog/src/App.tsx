@@ -1,220 +1,59 @@
-// import { useState } from 'react';
-// import { Header } from './components/Header';
-// import { Hero } from './components/Hero';
-// import { FlavorFinderQuiz } from './components/FlavorFinderQuiz';
-// import { FamilyBoxBuilder } from './components/FamilyBoxBuilder';
-// import { PurityGuarantee } from './components/PurityGuarantee';
-// import { ProductCatalog } from './components/ProductCatalog';
-// import { FamilyTestimonials } from './components/FamilyTestimonials';
-// import { Footer } from './components/Footer';
-// import { ProductModal } from './components/ProductModal';
-// import { BoxDrawerModal } from './components/BoxDrawerModal';
-// import { BulkInquiryModal } from './components/BulkInquiryModal';
-// import { CatalogDownloadModal } from './components/CatalogDownloadModal';
-// import { PRODUCTS } from './data/products';
-// import type { BoxItem, Product } from './types';
-// import { CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
 
-// export function App() {
-//   const [searchTerm, setSearchTerm] = useState('');
-  
-//   // Initialize with 2 popular snacks in the box as an appetizing demo
-//   const [boxItems, setBoxItems] = useState<BoxItem[]>([
-//     { product: PRODUCTS[0], weight: '400g', quantity: 1 },
-//     { product: PRODUCTS[2], weight: '400g', quantity: 1 }, // Soya Chips
-//   ]);
+const products = [
+  {
+    name: 'Soya Sticks',
+    category: 'Namkeen',
+    description: 'Crunchy, light and perfectly seasoned.',
+    image: '/products/soya-sticks.png',
+    tag: 'CLASSIC',
+  },
+  {
+    name: 'Soya Chips',
+    category: 'Namkeen',
+    description: 'Crispy bites packed with irresistible flavour.',
+    image: '/products/soya-chips.png',
+    tag: 'POPULAR',
+  },
+  {
+    name: 'Masala Sev',
+    category: 'Namkeen',
+    description: 'Traditional Indian crunch with a spicy twist.',
+    image: '/products/masala-sev.png',
+    tag: 'BESTSELLER',
+  },
+  {
+    name: 'Makhani Paneer Puff',
+    category: 'Fusion Puffs',
+    description: 'Rich makhani flavour wrapped in a golden puff.',
+    image: '/products/makhani-paneer.png',
+    tag: 'FUSION',
+  },
+  {
+    name: 'Mexican Cheese Puff',
+    category: 'Fusion Puffs',
+    description: 'Desi crunch meets cheesy Mexican flavours.',
+    image: '/products/mexican-cheese.png',
+    tag: 'NEW',
+  },
+  {
+    name: 'Rajwadi Puff',
+    category: 'Fusion Puffs',
+    description: 'A royal Indian-inspired fusion in every bite.',
+    image: '/products/rajwadi-puff.png',
+    tag: 'SPECIAL',
+  },
+];
 
-//   const [activeProductModal, setActiveProductModal] = useState<Product | null>(null);
-//   const [isBoxDrawerOpen, setIsBoxDrawerOpen] = useState(false);
-//   const [isInquiryModalOpen, setIsInquiryModalOpen] = useState(false);
-//   const [isCatalogDownloadOpen, setIsCatalogDownloadOpen] = useState(false);
-//   const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-//   const showToast = (message: string) => {
-//     setToastMessage(message);
-//     setTimeout(() => {
-//       setToastMessage(null);
-//     }, 2800);
-//   };
-
-//   // Add snack to box
-//   const handleAddToBox = (product: Product, weight: '200g' | '400g' | '1kg') => {
-//     setBoxItems((prev) => {
-//       const existingIndex = prev.findIndex(
-//         (item) => item.product.id === product.id && item.weight === weight
-//       );
-
-//       if (existingIndex > -1) {
-//         const updated = [...prev];
-//         updated[existingIndex].quantity += 1;
-//         return updated;
-//       } else {
-//         return [...prev, { product, weight, quantity: 1 }];
-//       }
-//     });
-
-//     showToast(`Added ${product.name} (${weight}) to your Family Box! 📦`);
-//   };
-
-//   // Remove snack from box
-//   const handleRemoveFromBox = (productId: string, weight: string) => {
-//     setBoxItems((prev) => prev.filter((item) => !(item.product.id === productId && item.weight === weight)));
-//   };
-
-//   // Update quantity in box
-//   const handleUpdateQuantity = (productId: string, weight: string, delta: number) => {
-//     setBoxItems((prev) => {
-//       return prev
-//         .map((item) => {
-//           if (item.product.id === productId && item.weight === weight) {
-//             const newQty = item.quantity + delta;
-//             return newQty > 0 ? { ...item, quantity: newQty } : null;
-//           }
-//           return item;
-//         })
-//         .filter(Boolean) as BoxItem[];
-//     });
-//   };
-
-//   // Clear all items in box
-//   const handleClearBox = () => {
-//     setBoxItems([]);
-//     showToast('Cleared your Family Box items.');
-//   };
-
-//   // Smooth scroll to section
-//   const handleNavigateSection = (sectionId: string) => {
-//     const el = document.getElementById(sectionId);
-//     if (el) {
-//       el.scrollIntoView({ behavior: 'smooth' });
-//     }
-//   };
-
-//   return (
-//     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: '#fcf9f2' }}>
-      
-//       {/* Toast Feedback Notification */}
-//       {toastMessage && (
-//         <div style={{
-//           position: 'fixed',
-//           bottom: '24px',
-//           right: '24px',
-//           zIndex: 2000,
-//           background: '#1c1917',
-//           color: '#ffffff',
-//           padding: '12px 20px',
-//           borderRadius: '30px',
-//           boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
-//           display: 'flex',
-//           alignItems: 'center',
-//           gap: '10px',
-//           border: '1px solid #c2410c',
-//           animation: 'fadeIn 0.25s ease-out'
-//         }}>
-//           <CheckCircle2 size={18} style={{ color: '#4ade80' }} />
-//           <span style={{ fontSize: '0.88rem', fontWeight: 600 }}>{toastMessage}</span>
-//         </div>
-//       )}
-
-//       {/* Header with Navigation, Live Box Cart & Download Button */}
-//       <Header
-//         searchTerm={searchTerm}
-//         onSearchChange={setSearchTerm}
-//         boxItems={boxItems}
-//         onOpenBoxModal={() => setIsBoxDrawerOpen(true)}
-//         onOpenInquiryModal={() => setIsInquiryModalOpen(true)}
-//         onOpenCatalogDownload={() => setIsCatalogDownloadOpen(true)}
-//         onNavigateSection={handleNavigateSection}
-//       />
-
-//       {/* Main Content Area */}
-//       <main>
-//         {/* Hero Section */}
-//         <Hero
-//           onExploreCatalog={() => handleNavigateSection('catalog')}
-//           onStartQuiz={() => handleNavigateSection('flavor-finder')}
-//           onOpenBoxBuilder={() => handleNavigateSection('family-box')}
-//           onOpenCatalogDownload={() => setIsCatalogDownloadOpen(true)}
-//         />
-
-//         {/* Unique Element 1: Desi Flavor & Spice Matchmaker Quiz */}
-//         <FlavorFinderQuiz
-//           onAddToBox={handleAddToBox}
-//           onOpenProductModal={(product) => setActiveProductModal(product)}
-//         />
-
-//         {/* Unique Element 2: Build Your Desi Family Snack Box Customizer */}
-//         <FamilyBoxBuilder
-//           boxItems={boxItems}
-//           onAddToBox={handleAddToBox}
-//           onRemoveFromBox={handleRemoveFromBox}
-//           onClearBox={handleClearBox}
-//         />
-
-//         {/* Unique Element 3: The 4-Pillar Purohit Crunch & Purity Guarantee */}
-//         <PurityGuarantee />
-
-//         {/* Comprehensive Product Catalog with Download Action */}
-//         <ProductCatalog
-//           searchTerm={searchTerm}
-//           onSearchChange={setSearchTerm}
-//           onOpenProductModal={(product) => setActiveProductModal(product)}
-//           onAddToBox={handleAddToBox}
-//           onOpenCatalogDownload={() => setIsCatalogDownloadOpen(true)}
-//         />
-
-//         {/* Indian Family Testimonials */}
-//         <FamilyTestimonials />
-//       </main>
-
-//       {/* Footer */}
-//       <Footer
-//         onNavigateSection={handleNavigateSection}
-//         onOpenInquiryModal={() => setIsInquiryModalOpen(true)}
-//         onOpenCatalogDownload={() => setIsCatalogDownloadOpen(true)}
-//       />
-
-//       {/* Product Detail Modal */}
-//       <ProductModal
-//         product={activeProductModal}
-//         onClose={() => setActiveProductModal(null)}
-//         onAddToBox={handleAddToBox}
-//       />
-
-//       {/* Slide-out Box Drawer / Cart Modal */}
-//       <BoxDrawerModal
-//         isOpen={isBoxDrawerOpen}
-//         onClose={() => setIsBoxDrawerOpen(false)}
-//         boxItems={boxItems}
-//         onRemoveItem={handleRemoveFromBox}
-//         onUpdateQuantity={handleUpdateQuantity}
-//         onOpenCustomizer={() => handleNavigateSection('family-box')}
-//         onClearBox={handleClearBox}
-//       />
-
-//       {/* Bulk & Wholesale Inquiry Modal */}
-//       <BulkInquiryModal
-//         isOpen={isInquiryModalOpen}
-//         onClose={() => setIsInquiryModalOpen(false)}
-//       />
-
-//       {/* Printable / Downloadable Product Catalog PDF Modal */}
-//       <CatalogDownloadModal
-//         isOpen={isCatalogDownloadOpen}
-//         onClose={() => setIsCatalogDownloadOpen(false)}
-//       />
-
-//     </div>
-//   );
-// }
-
-// export default App;
-
+const categories = ['All', 'Namkeen', 'Fusion Puffs', 'Mamara'];
 
 export function App() {
+  const [activeCategory, setActiveCategory] = useState('All');
+
   const handleDownloadCatalog = () => {
     const fileId = '1CG36zoHfH9oM5MPtLZJdj3D0TpG5l9rD';
-    const downloadUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+    const downloadUrl =
+      `https://drive.google.com/uc?export=download&id=${fileId}`;
 
     window.open(downloadUrl, '_blank', 'noopener,noreferrer');
   };
@@ -227,113 +66,1450 @@ export function App() {
     );
   };
 
+  const filteredProducts =
+    activeCategory === 'All'
+      ? products
+      : products.filter((product) => product.category === activeCategory);
+
   return (
-    <main
-      style={{
-        minHeight: '100vh',
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#fcf9f2',
-        overflow: 'hidden',
-        boxSizing: 'border-box',
-        padding: '24px',
-      }}
-    >
-      <section
-        style={{
-          width: '100%',
-          maxWidth: '720px',
-          textAlign: 'center',
-        }}
-      >
-        {/* Logo */}
-        <img
-          src="/purohit-logo.jpg"
-          alt="Purohit Namkeen"
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700;800&display=swap');
+
+        * {
+          box-sizing: border-box;
+        }
+
+        html {
+          scroll-behavior: smooth;
+        }
+
+        body {
+          margin: 0;
+          background: #f7f2e9;
+          color: #171513;
+          font-family: 'DM Sans', sans-serif;
+        }
+
+        button {
+          font-family: inherit;
+        }
+
+        .page {
+          overflow: hidden;
+          background:
+            radial-gradient(circle at 85% 8%, rgba(238, 105, 0, 0.10), transparent 25%),
+            #f7f2e9;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+          position: sticky;
+          top: 0;
+          z-index: 100;
+          height: 78px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 6vw;
+          background: rgba(247, 242, 233, 0.88);
+          backdrop-filter: blur(18px);
+          border-bottom: 1px solid rgba(23, 21, 19, 0.08);
+        }
+
+        .brand {
+          display: flex;
+          align-items: center;
+          gap: 13px;
+          text-decoration: none;
+          color: #171513;
+        }
+
+        .brand img {
+          width: 50px;
+          height: 50px;
+          object-fit: contain;
+          border-radius: 50%;
+        }
+
+        .brand-name {
+          font-size: 19px;
+          font-weight: 800;
+          letter-spacing: -0.5px;
+        }
+
+        .brand-sub {
+          font-size: 9px;
+          letter-spacing: 2px;
+          color: #ed6500;
+          font-weight: 700;
+          margin-top: 2px;
+        }
+
+        .nav-links {
+          display: flex;
+          align-items: center;
+          gap: 34px;
+        }
+
+        .nav-links a {
+          color: #34302b;
+          text-decoration: none;
+          font-size: 14px;
+          font-weight: 600;
+        }
+
+        .nav-links a:hover {
+          color: #ed6500;
+        }
+
+        .nav-button {
+          border: none;
+          padding: 11px 19px;
+          border-radius: 30px;
+          background: #ed6500;
+          color: white;
+          font-size: 13px;
+          font-weight: 700;
+          cursor: pointer;
+        }
+
+        /* HERO */
+
+        .hero {
+          min-height: calc(100vh - 78px);
+          display: grid;
+          grid-template-columns: 1.05fr 0.95fr;
+          align-items: center;
+          gap: 50px;
+          padding: 70px 7vw 90px;
+          position: relative;
+        }
+
+        .hero-left {
+          position: relative;
+          z-index: 2;
+        }
+
+        .eyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 9px;
+          padding: 8px 14px;
+          border-radius: 30px;
+          background: #fff8ee;
+          border: 1px solid #eadbc9;
+          color: #e96000;
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: 1.6px;
+          text-transform: uppercase;
+        }
+
+        .eyebrow span {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: #ed6500;
+        }
+
+        .hero h1 {
+          margin: 25px 0 20px;
+          max-width: 760px;
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(58px, 7vw, 105px);
+          line-height: 0.91;
+          letter-spacing: -5px;
+          font-weight: 800;
+        }
+
+        .hero h1 em {
+          color: #ed6500;
+          font-style: normal;
+        }
+
+        .hero-description {
+          max-width: 560px;
+          font-size: 18px;
+          line-height: 1.65;
+          color: #665f57;
+          margin-bottom: 32px;
+        }
+
+        .hero-actions {
+          display: flex;
+          gap: 14px;
+          flex-wrap: wrap;
+        }
+
+        .primary-button,
+        .secondary-button {
+          border-radius: 50px;
+          padding: 15px 24px;
+          font-weight: 700;
+          font-size: 14px;
+          cursor: pointer;
+          transition: 0.25s ease;
+        }
+
+        .primary-button {
+          border: none;
+          background: #ed6500;
+          color: white;
+          box-shadow: 0 14px 30px rgba(237, 101, 0, 0.20);
+        }
+
+        .primary-button:hover {
+          transform: translateY(-3px);
+          background: #cf5500;
+        }
+
+        .secondary-button {
+          border: 1px solid #d8cbbb;
+          background: transparent;
+          color: #28231f;
+        }
+
+        .secondary-button:hover {
+          background: #fffaf3;
+          transform: translateY(-3px);
+        }
+
+        .hero-stats {
+          display: flex;
+          gap: 42px;
+          margin-top: 50px;
+          padding-top: 25px;
+          border-top: 1px solid #ddd1c3;
+        }
+
+        .stat strong {
+          display: block;
+          font-family: 'Playfair Display', serif;
+          font-size: 31px;
+        }
+
+        .stat span {
+          color: #766e65;
+          font-size: 12px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.7px;
+        }
+
+        /* HERO PRODUCT VISUAL */
+
+        .hero-visual {
+          position: relative;
+          min-height: 570px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .orange-circle {
+          position: absolute;
+          width: min(520px, 80vw);
+          height: min(520px, 80vw);
+          border-radius: 50%;
+          background: #ed6500;
+          right: -30px;
+          top: 30px;
+        }
+
+        .visual-card {
+          position: relative;
+          z-index: 2;
+          width: min(410px, 80vw);
+          min-height: 490px;
+          padding: 25px;
+          border-radius: 28px;
+          background: #fffaf4;
+          border: 1px solid rgba(255,255,255,.9);
+          box-shadow: 0 35px 70px rgba(52, 38, 24, 0.18);
+          transform: rotate(3deg);
+        }
+
+        .visual-top {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .visual-label {
+          font-size: 10px;
+          font-weight: 800;
+          letter-spacing: 2px;
+          color: #ed6500;
+        }
+
+        .visual-number {
+          font-family: 'Playfair Display', serif;
+          font-size: 28px;
+        }
+
+        .snack-art {
+          height: 310px;
+          margin: 20px 0;
+          border-radius: 22px;
+          background:
+            radial-gradient(circle at 30% 25%, #f8d18e 0 8%, transparent 9%),
+            radial-gradient(circle at 70% 70%, #d6812d 0 10%, transparent 11%),
+            radial-gradient(circle at 45% 70%, #edac4d 0 9%, transparent 10%),
+            linear-gradient(145deg, #f1b65c, #d96b0e);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+          position: relative;
+        }
+
+        .snack-art::before {
+          content: '';
+          width: 230px;
+          height: 230px;
+          border-radius: 50%;
+          background: rgba(255, 228, 168, 0.45);
+          position: absolute;
+        }
+
+        .snack-bowl {
+          width: 240px;
+          height: 110px;
+          border-radius: 0 0 120px 120px;
+          background: #9f3500;
+          border: 8px solid #702400;
+          position: relative;
+          z-index: 2;
+          transform: translateY(40px);
+        }
+
+        .snack-bowl::before {
+          content: '';
+          position: absolute;
+          width: 210px;
+          height: 100px;
+          border-radius: 50%;
+          background: #e9a23e;
+          left: 7px;
+          top: -45px;
+        }
+
+        .visual-bottom {
+          display: flex;
+          justify-content: space-between;
+          align-items: end;
+        }
+
+        .visual-bottom h3 {
+          font-family: 'Playfair Display', serif;
+          font-size: 28px;
+          margin: 0;
+        }
+
+        .visual-bottom p {
+          margin: 5px 0 0;
+          color: #777067;
+          font-size: 12px;
+        }
+
+        .seal {
+          width: 58px;
+          height: 58px;
+          border-radius: 50%;
+          background: #ed6500;
+          color: white;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          font-size: 8px;
+          line-height: 1.2;
+          font-weight: 800;
+        }
+
+        /* MARQUEE */
+
+        .marquee {
+          background: #181513;
+          color: white;
+          padding: 17px 0;
+          overflow: hidden;
+          white-space: nowrap;
+        }
+
+        .marquee-inner {
+          display: inline-flex;
+          gap: 35px;
+          animation: move 25s linear infinite;
+        }
+
+        .marquee span {
+          font-size: 12px;
+          letter-spacing: 2px;
+          font-weight: 700;
+        }
+
+        .marquee .dot {
+          color: #ed6500;
+        }
+
+        @keyframes move {
+          from { transform: translateX(0); }
+          to { transform: translateX(-30%); }
+        }
+
+        /* PRODUCTS */
+
+        .section {
+          padding: 110px 7vw;
+        }
+
+        .section-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: end;
+          gap: 30px;
+          margin-bottom: 45px;
+        }
+
+        .section-kicker {
+          color: #ed6500;
+          font-size: 11px;
+          letter-spacing: 2px;
+          font-weight: 800;
+          text-transform: uppercase;
+        }
+
+        .section-title {
+          margin: 8px 0 0;
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(42px, 5vw, 67px);
+          line-height: 1;
+          letter-spacing: -2px;
+        }
+
+        .section-description {
+          max-width: 400px;
+          color: #756d65;
+          line-height: 1.6;
+          font-size: 14px;
+        }
+
+        .categories {
+          display: flex;
+          gap: 9px;
+          flex-wrap: wrap;
+          margin-bottom: 32px;
+        }
+
+        .category {
+          border: 1px solid #d8cbbb;
+          background: transparent;
+          border-radius: 30px;
+          padding: 10px 18px;
+          font-size: 12px;
+          font-weight: 700;
+          cursor: pointer;
+          color: #4e4841;
+        }
+
+        .category.active,
+        .category:hover {
+          background: #ed6500;
+          color: white;
+          border-color: #ed6500;
+        }
+
+        .product-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+        }
+
+        .product-card {
+          background: #fffaf4;
+          border: 1px solid #e5d9cb;
+          border-radius: 22px;
+          overflow: hidden;
+          transition: 0.3s ease;
+        }
+
+        .product-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 25px 50px rgba(51, 35, 19, 0.12);
+        }
+
+        .product-image {
+          height: 270px;
+          margin: 10px;
+          border-radius: 17px;
+          background:
+            radial-gradient(circle at 30% 35%, #f3ca82 0 7%, transparent 8%),
+            radial-gradient(circle at 65% 65%, #d47a1c 0 9%, transparent 10%),
+            linear-gradient(145deg, #f7d697, #e97a18);
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+        }
+
+        .product-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          position: relative;
+          z-index: 2;
+        }
+
+        .product-image-placeholder {
+          width: 160px;
+          height: 160px;
+          border-radius: 50%;
+          background: rgba(255,255,255,.28);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 20px;
+          color: #7b3709;
+          font-weight: 800;
+          font-size: 15px;
+          position: relative;
+          z-index: 2;
+        }
+
+        .product-tag {
+          position: absolute;
+          top: 14px;
+          left: 14px;
+          z-index: 4;
+          padding: 6px 9px;
+          background: #181513;
+          color: white;
+          border-radius: 4px;
+          font-size: 8px;
+          letter-spacing: 1px;
+          font-weight: 800;
+        }
+
+        .product-info {
+          padding: 8px 20px 22px;
+        }
+
+        .product-category {
+          color: #ed6500;
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          font-weight: 800;
+        }
+
+        .product-info h3 {
+          margin: 7px 0 5px;
+          font-family: 'Playfair Display', serif;
+          font-size: 25px;
+        }
+
+        .product-info p {
+          margin: 0;
+          color: #777067;
+          font-size: 13px;
+          line-height: 1.5;
+        }
+
+        /* STORY */
+
+        .story {
+          padding: 30px 7vw 110px;
+        }
+
+        .story-box {
+          background: #1a1714;
+          color: white;
+          border-radius: 32px;
+          min-height: 580px;
+          display: grid;
+          grid-template-columns: 0.9fr 1.1fr;
+          overflow: hidden;
+        }
+
+        .story-visual {
+          position: relative;
+          background:
+            linear-gradient(rgba(0,0,0,.05), rgba(0,0,0,.3)),
+            #ed6500;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-height: 500px;
+        }
+
+        .story-circle {
+          width: 320px;
+          height: 320px;
+          border-radius: 50%;
+          background: #f7f2e9;
+          position: absolute;
+        }
+
+        .story-initial {
+          position: relative;
+          z-index: 2;
+          font-family: 'Playfair Display', serif;
+          font-size: 150px;
+          font-weight: 800;
+          color: #ed6500;
+        }
+
+        .story-content {
+          padding: 70px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .story-content .section-kicker {
+          color: #ff7920;
+        }
+
+        .story-content h2 {
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(43px, 5vw, 68px);
+          line-height: .98;
+          margin: 12px 0 25px;
+        }
+
+        .story-content p {
+          color: #bdb6af;
+          line-height: 1.75;
+          font-size: 15px;
+          max-width: 580px;
+        }
+
+        .founder {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          margin-top: 25px;
+        }
+
+        .founder-avatar {
+          width: 48px;
+          height: 48px;
+          border-radius: 50%;
+          background: #ed6500;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 800;
+        }
+
+        .founder strong {
+          display: block;
+          font-size: 14px;
+        }
+
+        .founder span {
+          display: block;
+          color: #8f8880;
+          font-size: 11px;
+          margin-top: 3px;
+        }
+
+        /* QUALITY */
+
+        .quality {
+          padding: 0 7vw 110px;
+        }
+
+        .quality-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          border-top: 1px solid #d8cbbb;
+          border-bottom: 1px solid #d8cbbb;
+        }
+
+        .quality-item {
+          padding: 35px 25px;
+          border-right: 1px solid #d8cbbb;
+        }
+
+        .quality-item:last-child {
+          border-right: none;
+        }
+
+        .quality-number {
+          color: #ed6500;
+          font-size: 11px;
+          font-weight: 800;
+          letter-spacing: 2px;
+        }
+
+        .quality-item h3 {
+          font-family: 'Playfair Display', serif;
+          font-size: 26px;
+          margin: 15px 0 8px;
+        }
+
+        .quality-item p {
+          margin: 0;
+          color: #756d65;
+          line-height: 1.5;
+          font-size: 12px;
+        }
+
+        /* CTA */
+
+        .cta {
+          margin: 0 7vw 80px;
+          padding: 75px 50px;
+          border-radius: 30px;
+          background: #ed6500;
+          color: white;
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .cta::before,
+        .cta::after {
+          content: '';
+          position: absolute;
+          border: 1px solid rgba(255,255,255,.18);
+          border-radius: 50%;
+        }
+
+        .cta::before {
+          width: 400px;
+          height: 400px;
+          left: -180px;
+          top: -220px;
+        }
+
+        .cta::after {
+          width: 500px;
+          height: 500px;
+          right: -230px;
+          bottom: -350px;
+        }
+
+        .cta h2 {
+          position: relative;
+          z-index: 2;
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(40px, 5vw, 65px);
+          margin: 0 0 14px;
+        }
+
+        .cta p {
+          position: relative;
+          z-index: 2;
+          max-width: 540px;
+          margin: 0 auto 28px;
+          color: rgba(255,255,255,.82);
+          line-height: 1.6;
+        }
+
+        .cta-button {
+          position: relative;
+          z-index: 2;
+          border: none;
+          background: #181513;
+          color: white;
+          border-radius: 50px;
+          padding: 15px 25px;
+          font-weight: 700;
+          cursor: pointer;
+        }
+
+        /* FOOTER */
+
+        footer {
+          padding: 35px 7vw;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-top: 1px solid #ded3c6;
+          color: #756d65;
+          font-size: 12px;
+        }
+
+        .footer-brand {
+          font-weight: 800;
+          color: #171513;
+        }
+
+        .footer-instagram {
+          border: none;
+          background: none;
+          cursor: pointer;
+          font-size: 12px;
+          color: #756d65;
+        }
+
+        .footer-instagram:hover {
+          color: #ed6500;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 900px) {
+          .nav-links {
+            display: none;
+          }
+
+          .hero {
+            grid-template-columns: 1fr;
+            padding-top: 55px;
+          }
+
+          .hero-visual {
+            min-height: 510px;
+          }
+
+          .product-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+
+          .story-box {
+            grid-template-columns: 1fr;
+          }
+
+          .story-content {
+            padding: 50px 35px;
+          }
+
+          .quality-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+
+          .quality-item:nth-child(2) {
+            border-right: none;
+          }
+
+          .quality-item:nth-child(-n+2) {
+            border-bottom: 1px solid #d8cbbb;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .navbar {
+            padding: 0 20px;
+          }
+
+          .brand-name {
+            font-size: 16px;
+          }
+
+          .hero {
+            padding: 45px 22px 65px;
+          }
+
+          .hero h1 {
+            font-size: 56px;
+            letter-spacing: -3px;
+          }
+
+          .hero-description {
+            font-size: 15px;
+          }
+
+          .hero-stats {
+            gap: 22px;
+          }
+
+          .stat strong {
+            font-size: 25px;
+          }
+
+          .hero-visual {
+            min-height: 430px;
+          }
+
+          .orange-circle {
+            width: 360px;
+            height: 360px;
+            right: -90px;
+          }
+
+          .visual-card {
+            width: 310px;
+            min-height: 410px;
+          }
+
+          .snack-art {
+            height: 240px;
+          }
+
+          .section,
+          .story,
+          .quality {
+            padding-left: 22px;
+            padding-right: 22px;
+          }
+
+          .section {
+            padding-top: 75px;
+            padding-bottom: 75px;
+          }
+
+          .section-header {
+            display: block;
+          }
+
+          .section-description {
+            margin-top: 18px;
+          }
+
+          .product-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .product-image {
+            height: 300px;
+          }
+
+          .story-box {
+            border-radius: 22px;
+          }
+
+          .story-visual {
+            min-height: 320px;
+          }
+
+          .story-circle {
+            width: 230px;
+            height: 230px;
+          }
+
+          .story-initial {
+            font-size: 105px;
+          }
+
+          .story-content {
+            padding: 45px 25px;
+          }
+
+          .quality-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .quality-item,
+          .quality-item:nth-child(2) {
+            border-right: none;
+            border-bottom: 1px solid #d8cbbb;
+          }
+
+          .quality-item:last-child {
+            border-bottom: none;
+          }
+
+          .cta {
+            margin: 0 22px 55px;
+            padding: 55px 25px;
+          }
+
+          footer {
+            padding: 25px 22px;
+            gap: 20px;
+          }
+        }
+      `}</style>
+
+      <div className="page">
+
+        {/* NAVIGATION */}
+        <nav className="navbar">
+          <a className="brand" href="#">
+            <img src="/purohit-logo.jpg" alt="Purohit Namkeen" />
+
+            <div>
+              <div className="brand-name">Purohit Namkeen</div>
+              <div className="brand-sub">SWAD JO RAHE YAAD</div>
+            </div>
+          </a>
+
+          <div className="nav-links">
+            <a href="#products">Products</a>
+            <a href="#story">Our Story</a>
+            <a href="#quality">Quality</a>
+          </div>
+
+          <button className="nav-button" onClick={handleDownloadCatalog}>
+            View Catalog
+          </button>
+        </nav>
+
+        {/* HERO */}
+        <section className="hero">
+
+          <div className="hero-left">
+
+            <div className="eyebrow">
+              <span />
+              Since 2010 · Purohit Namkeen
+            </div>
+
+            <h1>
+              India's
+              <br />
+              <em>crunchiest</em>
+              <br />
+              stories.
+            </h1>
+
+            <p className="hero-description">
+              From timeless Indian namkeen to bold fusion flavours,
+              Purohit brings together tradition, creativity and quality
+              in every unforgettable bite.
+            </p>
+
+            <div className="hero-actions">
+              <button
+                className="primary-button"
+                onClick={handleDownloadCatalog}
+              >
+                Explore Product Catalog →
+              </button>
+
+              <button
+                className="secondary-button"
+                onClick={handleInstagram}
+              >
+                Instagram ↗
+              </button>
+            </div>
+
+            <div className="hero-stats">
+              <div className="stat">
+                <strong>60+</strong>
+                <span>Fusion Variety</span>
+              </div>
+
+              <div className="stat">
+                <strong>100%</strong>
+                <span>Quality Focus</span>
+              </div>
+
+              <div className="stat">
+                <strong>1000+</strong>
+                <span>Retail Shops</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div className="hero-visual">
+
+            <div className="orange-circle" />
+
+            <div className="visual-card">
+
+              <div className="visual-top">
+                <div className="visual-label">
+                  PUROHIT COLLECTION
+                </div>
+
+                <div className="visual-number">
+                  01
+                </div>
+              </div>
+              <div className="snack-art">
+                <img
+                  src="/products.png"
+                  alt="Purohit Namkeen Snacks"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    maxWidth: "520px",
+                    maxHeight: "520px",
+                    objectFit: "contain",
+                    objectPosition: "center",
+                    display: "block",
+                    margin: "0 auto",
+                    borderRadius: "20px",
+                  }}
+                />
+              </div>
+
+              <div className="visual-bottom">
+                <div>
+                  <h3>Products</h3>
+                  <p>Crispy · Savoury · Addictive</p>
+                </div>
+
+                <div className="seal">
+                  MADE<br />
+                  WITH<br />
+                  CARE
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        {/* MARQUEE */}
+        <div className="marquee">
+          <div className="marquee-inner">
+            <span>PURE FLAVOUR</span>
+            <span className="dot">●</span>
+            <span>CRAZY CRUNCH</span>
+            <span className="dot">●</span>
+            <span>INDIAN SOUL</span>
+            <span className="dot">●</span>
+            <span>MODERN TWIST</span>
+            <span className="dot">●</span>
+            <span>PUROHIT NAMKEEN</span>
+            <span className="dot">●</span>
+            <span>PURE FLAVOUR</span>
+            <span className="dot">●</span>
+            <span>CRAZY CRUNCH</span>
+          </div>
+        </div>
+
+        <section
+          id="story"
           style={{
-            display: 'block',
-            width: 'clamp(120px, 25vw, 190px)',
-            height: 'auto',
-            maxHeight: '150px',
-            objectFit: 'contain',
-            margin: '0 auto 28px',
-          }}
-        />
-        {/* Company Name */}
-        <h1
-          style={{
-            margin: 0,
-            color: '#1c1917',
-            fontSize: 'clamp(2.8rem, 8vw, 5.5rem)',
-            lineHeight: 1.05,
-            fontWeight: 700,
-            letterSpacing: '-0.04em',
+            width: "100%",
+            padding: "70px 40px",
+            boxSizing: "border-box",
+            background: "#f6f1e9",
           }}
         >
-          Purohit Namkeen
-        </h1>
-
-        {/* Instagram Handle */}
-        <button
-          onClick={handleInstagram}
-          style={{
-            marginTop: '18px',
-            padding: 0,
-            border: 'none',
-            background: 'transparent',
-            color: '#78716c',
-            fontSize: '1rem',
-            fontWeight: 500,
-            cursor: 'pointer',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color = '#c2410c';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color = '#78716c';
-          }}
-        >
-          @purohitnamkeenofficial
-        </button>
-
-        {/* Catalog Button */}
-        <div style={{ marginTop: '36px' }}>
-          <button
-            onClick={handleDownloadCatalog}
+          <div
             style={{
-              padding: '15px 30px',
-              border: 'none',
-              borderRadius: '8px',
-              background: '#c2410c',
-              color: '#ffffff',
-              fontSize: '1rem',
-              fontWeight: 600,
-              cursor: 'pointer',
-              boxShadow: '0 8px 20px rgba(194, 65, 12, 0.18)',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#9a3412';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow =
-                '0 12px 24px rgba(194, 65, 12, 0.25)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#c2410c';
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow =
-                '0 8px 20px rgba(194, 65, 12, 0.18)';
+              maxWidth: "1400px",
+              margin: "0 auto",
+              display: "flex",
+              alignItems: "center",
+              gap: "70px",
+              padding: "60px",
+              boxSizing: "border-box",
+              background: "#201e1c",
+              borderRadius: "32px",
+              overflow: "hidden",
+              position: "relative",
             }}
           >
-            Download Snack Catalog
+            {/* =====================================
+        LEFT - FOUNDER IMAGE
+    ====================================== */}
+            <div
+              style={{
+                position: "relative",
+                flex: "1 1 50%",
+                minWidth: "0",
+                height: "580px",
+                display: "flex",
+                alignItems: "flex-end",
+                justifyContent: "center",
+                background: "#fffaf4",
+                borderRadius: "35px",
+                overflow: "hidden",
+              }}
+            >
+              {/* Large orange circle */}
+              <div
+                style={{
+                  position: "absolute",
+                  width: "500px",
+                  height: "500px",
+                  borderRadius: "50%",
+                  background:
+                    "radial-gradient(circle at 35% 30%, #ff9a3c 0%, #f56600 48%, #d94d00 100%)",
+                  bottom: "-80px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  zIndex: 1,
+                }}
+              />
+
+              {/* Gold ring */}
+              <div
+                style={{
+                  position: "absolute",
+                  width: "530px",
+                  height: "530px",
+                  borderRadius: "50%",
+                  border: "2px solid rgba(207, 151, 62, 0.55)",
+                  bottom: "-95px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  zIndex: 2,
+                }}
+              />
+
+              {/* Decorative dots */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "35px",
+                  left: "35px",
+                  width: "80px",
+                  height: "80px",
+                  backgroundImage:
+                    "radial-gradient(#f56600 2px, transparent 2px)",
+                  backgroundSize: "15px 15px",
+                  opacity: 0.45,
+                  zIndex: 3,
+                }}
+              />
+
+              {/* Small decorative circle */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50px",
+                  right: "50px",
+                  width: "14px",
+                  height: "14px",
+                  borderRadius: "50%",
+                  background: "#f56600",
+                  zIndex: 3,
+                }}
+              />
+
+              {/* Founder Image */}
+              <img
+                src="/founder.png"
+                alt="Purohit Namkeen Founder"
+                style={{
+                  position: "relative",
+                  width: "95%",
+                  maxWidth: "580px",
+                  height: "auto",
+                  maxHeight: "570px",
+                  objectFit: "contain",
+                  objectPosition: "bottom center",
+                  display: "block",
+                  zIndex: 4,
+                  filter: "drop-shadow(0 20px 25px rgba(0,0,0,0.20))",
+                }}
+              />
+
+              {/* Founder Badge */}
+              <div
+                style={{
+                  position: "absolute",
+                  left: "25px",
+                  bottom: "25px",
+                  zIndex: 6,
+                  padding: "14px 20px",
+                  background: "#201e1c",
+                  borderRadius: "16px",
+                  boxShadow: "0 12px 30px rgba(0,0,0,0.20)",
+                }}
+              >
+                <div
+                  style={{
+                    color: "#f56600",
+                    fontSize: "10px",
+                    fontWeight: "700",
+                    letterSpacing: "2px",
+                    textTransform: "uppercase",
+                    marginBottom: "5px",
+                  }}
+                >
+                  OUR FOUNDER
+                </div>
+
+                <div
+                  style={{
+                    color: "#ffffff",
+                    fontSize: "14px",
+                    fontWeight: "700",
+                  }}
+                >
+                  Mr. Harish Bhai Purohit
+                </div>
+              </div>
+            </div>
+
+            {/* =====================================
+        RIGHT - JOURNEY CONTENT
+    ====================================== */}
+            <div
+              style={{
+                flex: "1 1 50%",
+                minWidth: "0",
+                color: "#ffffff",
+              }}
+            >
+              {/* Section Label */}
+              <div
+                style={{
+                  fontSize: "12px",
+                  fontWeight: "700",
+                  letterSpacing: "3px",
+                  color: "#f56600",
+                  textTransform: "uppercase",
+                  marginBottom: "22px",
+                }}
+              >
+                OUR JOURNEY
+              </div>
+
+              {/* Main Heading */}
+              <h2
+                style={{
+                  margin: "0 0 28px 0",
+                  fontFamily: 'Georgia, "Times New Roman", serif',
+                  fontSize: "clamp(42px, 5vw, 70px)",
+                  lineHeight: "1.05",
+                  fontWeight: "700",
+                  letterSpacing: "-2px",
+                  color: "#ffffff",
+                }}
+              >
+                From a vision
+                <br />
+                <span style={{ color: "#f56600" }}>to a promise.</span>
+              </h2>
+
+              {/* First Paragraph */}
+              <p
+                style={{
+                  margin: "0 0 20px 0",
+                  maxWidth: "600px",
+                  fontSize: "16px",
+                  lineHeight: "1.8",
+                  fontWeight: "400",
+                  color: "#c7c1bb",
+                }}
+              >
+                It all started with the vision of our founder,
+                Mr. Harish Bhai Purohit, who introduced innovative
+                products like Soya Sticks and Soya Chips.
+              </p>
+
+              {/* Second Paragraph */}
+              <p
+                style={{
+                  margin: "0",
+                  maxWidth: "600px",
+                  fontSize: "16px",
+                  lineHeight: "1.8",
+                  fontWeight: "400",
+                  color: "#c7c1bb",
+                }}
+              >
+                What began as a small idea soon grew into a trusted
+                name, built around quality, taste and innovation.
+                Today, Purohit Namkeen continues that journey with
+                the same passion that started it all.
+              </p>
+
+              {/* Founder Information */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "15px",
+                  marginTop: "38px",
+                }}
+              >
+                {/* Avatar */}
+                <div
+                  style={{
+                    width: "52px",
+                    height: "52px",
+                    flexShrink: 0,
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "#f56600",
+                    color: "#ffffff",
+                    fontSize: "14px",
+                    fontWeight: "700",
+                    boxShadow: "0 8px 20px rgba(245,102,0,0.25)",
+                  }}
+                >
+                  HP
+                </div>
+
+                {/* Name */}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "5px",
+                  }}
+                >
+                  <strong
+                    style={{
+                      fontSize: "15px",
+                      fontWeight: "700",
+                      color: "#ffffff",
+                    }}
+                  >
+                    Mr. Harish Bhai Purohit
+                  </strong>
+
+                  <span
+                    style={{
+                      fontSize: "10px",
+                      fontWeight: "500",
+                      letterSpacing: "1.5px",
+                      color: "#88827d",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    Founder · Purohit Namkeen
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section className="cta">
+
+          <h2>Ready to discover<br />your next favourite?</h2>
+
+          <p>
+            Explore the complete Purohit Namkeen collection,
+            from classic Indian favourites to crazy fusion creations.
+          </p>
+
+          <button
+            className="cta-button"
+            onClick={handleDownloadCatalog}
+          >
+            Download Complete Catalog ↓
           </button>
-        </div>
-      </section>
-    </main>
+
+        </section>
+
+        {/* FOOTER */}
+        <footer>
+
+          <div>
+            <span className="footer-brand">
+              PUROHIT NAMKEEN
+            </span>
+            <span> Swad Jo Rahe Yaad.</span>
+          </div>
+
+          <button
+            className="footer-instagram"
+            onClick={handleInstagram}
+          >
+            @purohitnamkeenofficial ↗
+          </button>
+
+        </footer>
+
+      </div>
+    </>
   );
 }
 
 export default App;
-

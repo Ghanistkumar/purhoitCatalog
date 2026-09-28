@@ -49,6 +49,7 @@ const categories = ['All', 'Namkeen', 'Fusion Puffs', 'Mamara'];
 
 export function App() {
   const [activeCategory, setActiveCategory] = useState('All');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleDownloadCatalog = () => {
     const fileId = '1CG36zoHfH9oM5MPtLZJdj3D0TpG5l9rD';
@@ -854,24 +855,138 @@ export function App() {
           color: #ed6500;
         }
 
-        /* MOBILE */
+        /* RESPONSIVE */
+
+        .nav-actions {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .menu-toggle {
+          display: none;
+          width: 44px;
+          height: 44px;
+          padding: 10px;
+          border: 1px solid #d8cbbb;
+          border-radius: 12px;
+          background: #fffaf4;
+          cursor: pointer;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          gap: 5px;
+        }
+
+        .menu-toggle span {
+          display: block;
+          width: 21px;
+          height: 2px;
+          border-radius: 2px;
+          background: #171513;
+          transition: 0.2s ease;
+        }
+
+        @media (max-width: 1100px) {
+          .navbar {
+            padding: 0 4vw;
+          }
+
+          .hero {
+            grid-template-columns: 1fr 0.9fr;
+            gap: 25px;
+            padding-left: 5vw;
+            padding-right: 5vw;
+          }
+
+          .hero h1 {
+            font-size: clamp(52px, 7vw, 78px);
+            letter-spacing: -4px;
+          }
+
+          .visual-card {
+            width: min(380px, 90%);
+          }
+
+          .section,
+          .quality {
+            padding-left: 5vw;
+            padding-right: 5vw;
+          }
+
+          .story {
+            padding-left: 5vw;
+            padding-right: 5vw;
+          }
+
+          .story-content {
+            padding: 55px;
+          }
+        }
 
         @media (max-width: 900px) {
+          .navbar {
+            height: 70px;
+          }
+
           .nav-links {
             display: none;
+            position: absolute;
+            top: calc(100% + 1px);
+            left: 14px;
+            right: 14px;
+            padding: 12px;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 4px;
+            background: rgba(255, 250, 244, 0.98);
+            border: 1px solid #e5d9cb;
+            border-radius: 16px;
+            box-shadow: 0 18px 40px rgba(52, 38, 24, 0.12);
+            backdrop-filter: blur(18px);
+          }
+
+          .nav-links.mobile-open {
+            display: flex;
+          }
+
+          .nav-links a {
+            padding: 13px 14px;
+            border-radius: 10px;
+          }
+
+          .nav-links a:hover,
+          .nav-links a:focus-visible {
+            background: #fff1e2;
+            outline: none;
+          }
+
+          .menu-toggle {
+            display: flex;
+          }
+
+          .nav-button {
+            padding: 10px 15px;
           }
 
           .hero {
             grid-template-columns: 1fr;
+            min-height: auto;
             padding-top: 55px;
+            padding-bottom: 70px;
+          }
+
+          .hero-left {
+            max-width: 760px;
           }
 
           .hero-visual {
             min-height: 510px;
+            margin-top: 5px;
           }
 
           .product-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
           }
 
           .story-box {
@@ -879,11 +994,11 @@ export function App() {
           }
 
           .story-content {
-            padding: 50px 35px;
+            padding: 50px 40px;
           }
 
           .quality-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
           }
 
           .quality-item:nth-child(2) {
@@ -896,101 +1011,320 @@ export function App() {
         }
 
         @media (max-width: 600px) {
+          html {
+            overflow-x: hidden;
+          }
+
+          body {
+            width: 100%;
+            overflow-x: hidden;
+          }
+
+          .page {
+            width: 100%;
+            overflow-x: clip;
+          }
+
           .navbar {
-            padding: 0 20px;
+            height: 66px;
+            padding: 0 16px;
+          }
+
+          .brand {
+            gap: 9px;
+            min-width: 0;
+          }
+
+          .brand img {
+            width: 42px;
+            height: 42px;
           }
 
           .brand-name {
-            font-size: 16px;
+            font-size: 15px;
+            line-height: 1.1;
+          }
+
+          .brand-sub {
+            font-size: 7px;
+            letter-spacing: 1.5px;
+          }
+
+          .nav-actions {
+            gap: 7px;
+          }
+
+          .nav-button {
+            font-size: 11px;
+            padding: 9px 12px;
+          }
+
+          .menu-toggle {
+            width: 40px;
+            height: 40px;
           }
 
           .hero {
-            padding: 45px 22px 65px;
+            padding: 38px 18px 55px;
+            gap: 25px;
+          }
+
+          .eyebrow {
+            max-width: 100%;
+            font-size: 9px;
+            padding: 7px 11px;
+            letter-spacing: 1.1px;
           }
 
           .hero h1 {
-            font-size: 56px;
-            letter-spacing: -3px;
+            margin: 19px 0 17px;
+            font-size: clamp(43px, 14vw, 58px);
+            line-height: 0.94;
+            letter-spacing: -2.5px;
           }
 
           .hero-description {
-            font-size: 15px;
+            font-size: 14px;
+            line-height: 1.65;
+            margin-bottom: 24px;
+          }
+
+          .hero-actions {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+          }
+
+          .primary-button,
+          .secondary-button {
+            width: 100%;
+            min-height: 48px;
+            padding: 13px 18px;
           }
 
           .hero-stats {
-            gap: 22px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 34px;
+            padding-top: 20px;
           }
 
           .stat strong {
-            font-size: 25px;
+            font-size: 22px;
+          }
+
+          .stat span {
+            display: block;
+            font-size: 8px;
+            line-height: 1.3;
+            letter-spacing: 0.45px;
           }
 
           .hero-visual {
-            min-height: 430px;
+            min-height: 390px;
+            width: 100%;
           }
 
           .orange-circle {
-            width: 360px;
-            height: 360px;
-            right: -90px;
+            width: 300px;
+            height: 300px;
+            right: 50%;
+            top: 32px;
+            transform: translateX(50%);
           }
 
           .visual-card {
-            width: 310px;
-            min-height: 410px;
+            width: min(310px, calc(100vw - 48px));
+            min-height: 365px;
+            padding: 17px;
+            border-radius: 22px;
+            transform: rotate(2deg);
+          }
+
+          .visual-label {
+            font-size: 8px;
+            letter-spacing: 1.5px;
+          }
+
+          .visual-number {
+            font-size: 22px;
           }
 
           .snack-art {
-            height: 240px;
+            height: 215px;
+            margin: 14px 0;
+            border-radius: 17px;
+          }
+
+          .visual-bottom h3 {
+            font-size: 24px;
+          }
+
+          .visual-bottom p {
+            font-size: 10px;
+          }
+
+          .seal {
+            width: 48px;
+            height: 48px;
+            font-size: 7px;
+          }
+
+          .marquee {
+            padding: 14px 0;
+          }
+
+          .marquee-inner {
+            gap: 24px;
+          }
+
+          .marquee span {
+            font-size: 10px;
+            letter-spacing: 1.5px;
           }
 
           .section,
-          .story,
           .quality {
-            padding-left: 22px;
-            padding-right: 22px;
+            padding-left: 18px;
+            padding-right: 18px;
           }
 
           .section {
-            padding-top: 75px;
-            padding-bottom: 75px;
+            padding-top: 65px;
+            padding-bottom: 65px;
           }
 
           .section-header {
             display: block;
+            margin-bottom: 28px;
+          }
+
+          .section-title {
+            font-size: clamp(38px, 12vw, 50px);
+            letter-spacing: -1.5px;
           }
 
           .section-description {
-            margin-top: 18px;
+            margin-top: 15px;
+            font-size: 13px;
+          }
+
+          .categories {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            margin-bottom: 24px;
+            scrollbar-width: none;
+          }
+
+          .categories::-webkit-scrollbar {
+            display: none;
+          }
+
+          .category {
+            flex: 0 0 auto;
+            padding: 9px 14px;
+            font-size: 11px;
           }
 
           .product-grid {
             grid-template-columns: 1fr;
+            gap: 16px;
+          }
+
+          .product-card {
+            border-radius: 18px;
           }
 
           .product-image {
-            height: 300px;
+            height: min(330px, 76vw);
+            margin: 8px;
+            border-radius: 14px;
           }
 
-          .story-box {
-            border-radius: 22px;
+          .product-info {
+            padding: 7px 17px 20px;
           }
 
-          .story-visual {
-            min-height: 320px;
+          .product-info h3 {
+            font-size: 23px;
           }
 
-          .story-circle {
-            width: 230px;
-            height: 230px;
+          .product-info p {
+            font-size: 12px;
           }
 
-          .story-initial {
-            font-size: 105px;
+          /* Founder/story section with inline styles overridden responsively */
+          section#story {
+            padding: 42px 14px !important;
           }
 
-          .story-content {
-            padding: 45px 25px;
+          section#story > div {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 0 !important;
+            padding: 0 !important;
+            border-radius: 22px !important;
+            width: 100% !important;
+          }
+
+          section#story > div > div:first-child {
+            width: 100% !important;
+            flex: none !important;
+            height: 360px !important;
+            min-height: 360px !important;
+            border-radius: 22px 22px 0 0 !important;
+          }
+
+          section#story > div > div:first-child > div:nth-child(1) {
+            width: 290px !important;
+            height: 290px !important;
+          }
+
+          section#story > div > div:first-child > div:nth-child(2) {
+            width: 310px !important;
+            height: 310px !important;
+          }
+
+          section#story > div > div:first-child > img {
+            width: 94% !important;
+            max-width: 390px !important;
+            max-height: 350px !important;
+          }
+
+          section#story > div > div:first-child > div:nth-child(4) {
+            left: 15px !important;
+            bottom: 15px !important;
+            padding: 10px 13px !important;
+            border-radius: 12px !important;
+          }
+
+          section#story > div > div:first-child > div:nth-child(4) > div:last-child {
+            font-size: 12px !important;
+          }
+
+          section#story > div > div:last-child {
+            width: 100% !important;
+            flex: none !important;
+            padding: 38px 22px 42px !important;
+          }
+
+          section#story h2 {
+            font-size: clamp(39px, 12vw, 53px) !important;
+            line-height: 1 !important;
+            letter-spacing: -1.5px !important;
+            margin-bottom: 21px !important;
+          }
+
+          section#story p {
+            font-size: 14px !important;
+            line-height: 1.7 !important;
+          }
+
+          .quality {
+            padding-top: 0;
+            padding-bottom: 65px;
           }
 
           .quality-grid {
@@ -1001,20 +1335,97 @@ export function App() {
           .quality-item:nth-child(2) {
             border-right: none;
             border-bottom: 1px solid #d8cbbb;
+            padding: 27px 20px;
           }
 
           .quality-item:last-child {
             border-bottom: none;
           }
 
+          .quality-item h3 {
+            font-size: 24px;
+          }
+
           .cta {
-            margin: 0 22px 55px;
-            padding: 55px 25px;
+            margin: 0 14px 45px;
+            padding: 48px 20px;
+            border-radius: 22px;
+          }
+
+          .cta h2 {
+            font-size: clamp(37px, 11vw, 49px);
+            line-height: 1;
+          }
+
+          .cta p {
+            font-size: 13px;
+            line-height: 1.6;
+          }
+
+          .cta-button {
+            width: 100%;
+            min-height: 48px;
+            padding: 13px 18px;
           }
 
           footer {
-            padding: 25px 22px;
-            gap: 20px;
+            padding: 23px 18px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+          }
+
+          .footer-instagram {
+            padding: 0;
+          }
+        }
+
+        @media (max-width: 380px) {
+          .brand-name {
+            font-size: 13px;
+          }
+
+          .brand-sub {
+            font-size: 6px;
+          }
+
+          .nav-button {
+            display: none;
+          }
+
+          .hero {
+            padding-left: 15px;
+            padding-right: 15px;
+          }
+
+          .hero h1 {
+            font-size: 44px;
+          }
+
+          .hero-stats {
+            gap: 6px;
+          }
+
+          .stat strong {
+            font-size: 20px;
+          }
+
+          .visual-card {
+            width: calc(100vw - 34px);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          html {
+            scroll-behavior: auto;
+          }
+
+          *,
+          *::before,
+          *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
           }
         }
       `}</style>
@@ -1032,15 +1443,28 @@ export function App() {
             </div>
           </a>
 
-          <div className="nav-links">
-            <a href="#products">Products</a>
-            <a href="#story">Our Story</a>
-            <a href="#quality">Quality</a>
+          <div className={`nav-links ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+            <a href="#products" onClick={() => setMobileMenuOpen(false)}>Products</a>
+            <a href="#story" onClick={() => setMobileMenuOpen(false)}>Our Story</a>
+            <a href="#quality" onClick={() => setMobileMenuOpen(false)}>Quality</a>
           </div>
 
-          <button className="nav-button" onClick={handleDownloadCatalog}>
-            View Catalog
-          </button>
+          <div className="nav-actions">
+            <button className="nav-button" onClick={handleDownloadCatalog}>
+              View Catalog
+            </button>
+
+            <button
+              className="menu-toggle"
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileMenuOpen}
+              onClick={() => setMobileMenuOpen((open) => !open)}
+            >
+              <span />
+              <span />
+              <span />
+            </button>
+          </div>
         </nav>
 
         {/* HERO */}
